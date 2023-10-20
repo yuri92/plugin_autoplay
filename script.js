@@ -15,10 +15,6 @@ function initFasceOrarie() {
     let isVideoPaused = false;
     setInterval(() => {
 
-        if(!player){
-            return;
-        }
-
         try{
             const currentTime = Date.now();
 
@@ -70,16 +66,15 @@ function init() {
                         } else {
                             window.location.reload();
                         }
-                    }, 8000)
+                    }, getRandomInt(5,15))
                 })
 
                 initFasceOrarie();
-
                 clearInterval(interval);
             } catch {
 
             }
-        }, 3000)
+        }, getRandomInt(5,8))
     }
 
 }
