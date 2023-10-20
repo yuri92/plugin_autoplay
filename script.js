@@ -18,10 +18,24 @@ function initFasceOrarie() {
         try{
             const currentTime = Date.now();
 
+            const fineLavoro = getDateInMillis(17,55);
+            const inizioLavoro = getDateInMillis(9,5)
+
             const pausaPranzoStart = getDateInMillis(12,55);
             const pausaPranzoEnd = getDateInMillis(14,5);
 
-            if(currentTime >= pausaPranzoStart && currentTime <= pausaPranzoEnd){
+            if(currentTime < inizioLavoro){
+                //è mattina, mettiamo in pausa
+                player.pause();
+                isVideoPaused = true;
+            }
+            else if(currentTime > fineLavoro){
+                //è sera, mettiamo in pausa
+                player.pause();
+                isVideoPaused = true;
+            }
+            else if(currentTime >= pausaPranzoStart && currentTime <= pausaPranzoEnd){
+                // è pausa pranzo, mettiamo in pausa
                 player.pause();
                 isVideoPaused = true;
             } else {
