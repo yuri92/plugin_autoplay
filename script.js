@@ -65,7 +65,7 @@ function init() {
     if (nextActivityLink) {
         setTimeout(() => {
             window.location.href = nextActivityLink;
-        }, getRandomMs(5, 10))
+        }, getRandomMs(2, 7))
 
     } else {
         const interval = setInterval(() => {
