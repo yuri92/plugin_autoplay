@@ -96,9 +96,9 @@ function init() {
 }
 
 $(window).on('load', () => {
-    init();
     const interval = setInterval(() => {
         if (isCorrectFasciaOraria()) {
+            init();
             clearInterval(interval)
         }
     }, 1000)
