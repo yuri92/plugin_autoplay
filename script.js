@@ -4,14 +4,37 @@ function getNextActivityLink() {
     return $('#next-activity-link').attr('href');
 }
 
-function initFasceOrarie() {
-    setInterval(() => {
-        try{
-            const currentDate = new Date();
-            const hours = currentDate.getHours();
-            const minutes = currentDate.getMinutes();
+function getDateInMillis(hours, minutes) {
+    const date = new Date();
+    date.setHours(hours, minutes);
 
-            const isMorning = (hours > 9 && minutes)
+    return date
+}
+
+function initFasceOrarie() {
+    let isVideoPaused = false;
+    setInterval(() => {
+
+        if(!player){
+            return;
+        }
+
+        try{
+            const currentTime = Date.now();
+
+            const pausaPranzoStart = getDateInMillis(12,55);
+            const pausaPranzoEnd = getDateInMillis(14,5);
+
+            if(currentTime >= pausaPranzoStart && currentTime <= pausaPranzoEnd){
+                player.pause();
+                isVideoPaused = true;
+            } else {
+                if(isVideoPaused){
+                    player.play();
+                    isVideoPaused = false;
+                }
+            }
+
 
         } catch {}
     }, 60000)
@@ -49,6 +72,8 @@ function init() {
                         }
                     }, 8000)
                 })
+
+                initFasceOrarie();
 
                 clearInterval(interval);
             } catch {
