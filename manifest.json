@@ -1,0 +1,17 @@
+{
+  "name": "Plugin corso",
+  "version": "1.0.0",
+  "description": "Plugin corso",
+  "manifest_version": 3,
+  "author": "Mario rossi",
+  "action":{
+    "default_popup": "index.html",
+    "default_title": "Plugin corso"
+  },
+  "content_scripts" : [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["player.js","jquery.min.js","script.js"]
+    }
+  ]
+}
