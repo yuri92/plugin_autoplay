@@ -83,8 +83,8 @@ function init() {
 
     if (nextActivityLink) {
         setTimeout(() => {
-
-        }, getRandomMs(4,7))
+            tryToGoToNextPage(false);
+        }, getRandomMs(3,6))
 
     } else {
         const interval = setInterval(() => {
