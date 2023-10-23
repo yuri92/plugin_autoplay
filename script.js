@@ -1,7 +1,26 @@
 let player;
 
 function getNextActivityLink() {
-    return $('#next-activity-link').attr('href');
+    let nextActivityLink = $('#next-activity-button a').attr('href');
+
+    if(!nextActivityLink){
+        nextActivityLink = $('#next-activity-link').attr('href');
+    }
+
+    return nextActivityLink
+}
+
+function tryToGoToNextPage(reload = false) {
+    const nextActivity = getNextActivityLink()
+
+    if(nextActivity){
+        window.location.href = nextActivity;
+    } else {
+        if(reload) {
+            window.location.reload();
+        }
+    }
+
 }
 
 function getDateInMillis(hours, minutes) {
@@ -63,9 +82,7 @@ function init() {
     let nextActivityLink = getNextActivityLink();
 
     if (nextActivityLink) {
-        setTimeout(() => {
-            window.location.href = nextActivityLink;
-        }, getRandomMs(2, 7))
+        tryToGoToNextPage(false);
 
     } else {
         const interval = setInterval(() => {
@@ -77,12 +94,7 @@ function init() {
                 player.on('ended', () => {
                     console.log('video finito, vado al prossimo')
                     setTimeout(() => {
-                        nextActivityLink = getNextActivityLink();
-                        if (nextActivityLink) {
-                            window.location.href = nextActivityLink;
-                        } else {
-                            window.location.reload();
-                        }
+                        tryToGoToNextPage();
                     }, getRandomMs(5, 15))
                 })
 
