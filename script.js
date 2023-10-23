@@ -61,11 +61,14 @@ function initFasceOrarie() {
             if (!isVideoPaused) {
                 player.pause();
                 isVideoPaused = true;
+                showNotification('Inizio fascia oraria protetta', 'Video messo in pausa');
+
             }
         } else {
             if (isVideoPaused) {
                 player.play();
                 isVideoPaused = false;
+                showNotification('Fine fascia oraria protetta', 'Video ripreso');
             }
         }
 
@@ -92,7 +95,8 @@ function init() {
                 player = new Vimeo.Player($('iframe')[0]);
 
                 player.play();
-                showNotification();
+                const titoloCorso = $('#region-main h2').text();
+                showNotification('Video iniziato', titoloCorso);
 
                 player.on('ended', () => {
                     console.log('video finito, vado al prossimo')
@@ -110,18 +114,15 @@ function init() {
     }
 }
 
-function showNotification() {
+function showNotification(title, body) {
     if (Notification.permission !== 'granted') {
         Notification.requestPermission();
     } else {
-        const titoloCorso = $('#region-main h2').text();
-
         const options = {
-            body: titoloCorso,
-            dir: 'ltr',
-            image: 'image.jpg'
+            body,
+            dir: 'ltr'
         };
-        const notification = new Notification('Video iniziato', options);
+        const notification = new Notification(title, options);
     }
 }
 
