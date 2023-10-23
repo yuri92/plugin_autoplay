@@ -10,7 +10,7 @@ function getNextActivityLink() {
     return nextActivityLink
 }
 
-function tryToGoToNextPage(reload = false) {
+function tryToGoToNextPage(reload = true) {
     const nextActivity = getNextActivityLink()
 
     if(nextActivity){
@@ -82,7 +82,9 @@ function init() {
     let nextActivityLink = getNextActivityLink();
 
     if (nextActivityLink) {
-        tryToGoToNextPage(false);
+        setTimeout(() => {
+
+        }, getRandomMs(4,7))
 
     } else {
         const interval = setInterval(() => {
