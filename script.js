@@ -92,6 +92,7 @@ function init() {
                 player = new Vimeo.Player($('iframe')[0]);
 
                 player.play();
+                showNotification();
 
                 player.on('ended', () => {
                     console.log('video finito, vado al prossimo')
@@ -106,6 +107,21 @@ function init() {
 
             }
         }, getRandomMs(5, 8))
+    }
+}
+
+function showNotification() {
+    if (Notification.permission !== 'granted') {
+        Notification.requestPermission();
+    } else {
+        const titoloCorso = $('#region-main h2').text();
+
+        const options = {
+            body: titoloCorso,
+            dir: 'ltr',
+            image: 'image.jpg'
+        };
+        const notification = new Notification('Video iniziato', options);
     }
 }
 
