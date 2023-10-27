@@ -1,10 +1,23 @@
 let player;
 
-const fineLavoro = getDateInMillis(17, getRandomInt(50,58));
 const inizioLavoro = getDateInMillis(9, getRandomInt(2,12))
+const fineLavoro = getDateInMillis(17, getRandomInt(50,58));
 
 const pausaPranzoStart = getDateInMillis(12, getRandomInt(50,58));
 const pausaPranzoEnd = getDateInMillis(14, getRandomInt(2,12));
+
+console.table({
+    '1. Inizio giornata lavorativa': formatTime(inizioLavoro),
+    '2. Inizio pausa pranzo': formatTime(pausaPranzoStart),
+    '3. Fine pausa pranzo': formatTime(pausaPranzoEnd),
+    '4. Fine giornata lavorativa': formatTime(fineLavoro),
+});
+
+function formatTime(timeInMillis){
+    const date = new Date(timeInMillis);
+    const formatNumber = number => number < 10 ? '0' + number : number
+    return `${formatNumber(date.getHours())}:${formatNumber(date.getMinutes())}:${formatNumber(date.getSeconds())}`
+}
 
 function getNextActivityLink() {
     let nextActivityLink = $('#next-activity-button a').attr('href');
