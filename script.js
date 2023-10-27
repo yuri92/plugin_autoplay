@@ -1,5 +1,11 @@
 let player;
 
+const fineLavoro = getDateInMillis(17, getRandomInt(50,58));
+const inizioLavoro = getDateInMillis(9, getRandomInt(2,12))
+
+const pausaPranzoStart = getDateInMillis(12, getRandomInt(50,58));
+const pausaPranzoEnd = getDateInMillis(14, getRandomInt(2,12));
+
 function getNextActivityLink() {
     let nextActivityLink = $('#next-activity-button a').attr('href');
 
@@ -32,12 +38,6 @@ function getDateInMillis(hours, minutes) {
 
 function isCorrectFasciaOraria() {
     const currentTime = Date.now();
-
-    const fineLavoro = getDateInMillis(17, 55);
-    const inizioLavoro = getDateInMillis(9, 5)
-
-    const pausaPranzoStart = getDateInMillis(12, 55);
-    const pausaPranzoEnd = getDateInMillis(14, 5);
 
     if (currentTime < inizioLavoro) {
         //è mattina, mettiamo in pausa
@@ -75,10 +75,14 @@ function initFasceOrarie() {
     }, 60000)
 }
 
-function getRandomMs(min, max) {
-    min = Math.ceil(min * 1000);
-    max = Math.floor(max * 1000);
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
+}
+
+function getRandomMs(min, max) {
+    return getRandomInt(min, max) * 1000;
 }
 
 function init() {
