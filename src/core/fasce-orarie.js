@@ -1,20 +1,81 @@
+/**
+ * Le fasce orarie cambiano di pochi minuti ad ogni reload della pagina.
+ * Da implementare una gestione più pulita tramite sessionStorage
+ */
+
+const currentDate = new Date();
 const inizioLavoro = Utils.getDateInMillis(9, Utils.getRandomInt(2, 10))
 const fineLavoro = Utils.getDateInMillis(17, Utils.getRandomInt(52, 58));
 
 const pausaPranzoStart = Utils.getDateInMillis(12, Utils.getRandomInt(52, 58));
 const pausaPranzoEnd = Utils.getDateInMillis(14, Utils.getRandomInt(2, 10));
 
-console.table({
-    '1. Inizio giornata lavorativa': Utils.formatTime(inizioLavoro),
-    '2. Inizio pausa pranzo': Utils.formatTime(pausaPranzoStart),
-    '3. Fine pausa pranzo': Utils.formatTime(pausaPranzoEnd),
-    '4. Fine giornata lavorativa': Utils.formatTime(fineLavoro),
-});
+$('body').prepend(`
+<style>
+    #fasce-orarie table, #fasce-orarie th, #fasce-orarie td {
+      border:1px solid black;
+    }
+    #fasce-orarie { 
+        font-family: Arial,serif;
+        position: absolute;        
+        margin: 10px; 
+        right: 1em;
+        top: 35%;
+        background-color : lightgray;
+        padding:10px; 
+    }
+    #fasce-orarie .fasce-orarie-close {
+        text-align: end;
+        cursor: pointer;
+    }
+</style>
+
+<div id="fasce-orarie">
+<strong>Fasce orarie protette <span class="fasce-orarie-close">[X]</span></strong>
+
+<table>
+  <tr>
+      <th>Ora corrente</th>
+      <td id="fasce-orarie-current-time"></td>
+  </tr>
+  <tr>
+      <th>Inizio giornata</th>
+      <td>${Utils.formatTime(inizioLavoro)}</td>
+  </tr>
+  <tr>
+    <th>Inizio pausa pranzo</th>
+    <td>${Utils.formatTime(pausaPranzoStart)}</td>
+  </tr>
+  <tr>
+    <th>Fine pausa pranzo</th>
+    <td>${Utils.formatTime(pausaPranzoEnd)}</td></tr>
+  <tr>
+    <th>Fine giornata</th>
+    <td>${Utils.formatTime(fineLavoro)}</td>
+  </tr>
+</table>
+</div>`
+)
+
+$(document).ready(() => {
+    const currentTimeInterval = setInterval(() => {
+        $('#fasce-orarie-current-time').text(Utils.formatTime(Date.now()))
+    }, 500)
+
+    $('#fasce-orarie .fasce-orarie-close').on('click', event => {
+        event.preventDefault();
+        $('#fasce-orarie').hide();
+        clearInterval(currentTimeInterval);
+    })
+})
 
 const isCorrectFasciaOraria = () => {
     const currentTime = Date.now();
 
-    if (currentTime < inizioLavoro) {
+    if(currentDate.getDay() === 0 || currentDate.getDay() === 6){
+        // è sabato o domenica
+        return false;
+    } else if (currentTime < inizioLavoro) {
         //è mattina
         return false;
     } else if (currentTime > fineLavoro) {

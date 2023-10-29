@@ -2,32 +2,6 @@ const {showNotification, getRandomMs} = Utils;
 let player;
 
 /**
- * Controllo delle fasce orarie:
- * Ogni 30 secondi, controlla di essere nella fascia oraria corretta. Se non lo è, mette in pausa il video.
- */
-function initCheckFasceOrarie() {
-    let isVideoPaused = false;
-    setInterval(() => {
-
-        if (!isCorrectFasciaOraria()) {
-            if (!isVideoPaused) {
-                player.pause();
-                isVideoPaused = true;
-                showNotification('Inizio fascia oraria protetta', 'Video messo in pausa');
-
-            }
-        } else {
-            if (isVideoPaused) {
-                player.play();
-                isVideoPaused = false;
-                showNotification('Fine fascia oraria protetta', 'Video ripreso');
-            }
-        }
-
-    }, 30000)
-}
-
-/**
  * Rimuove la dialog con l'avvertimento del mancato play del video
  * Diminuisce l'initInterval a 1 secondo per far partire il video QUASI subito
  */
@@ -44,8 +18,8 @@ function manualRestart(){
  * prima l'utente non interagisce con la pagina. Basta quindi un click per risolvere anche per tutti i video successivi.
  *
  * - Se la pagina non è in focus, fa comparire una notifica per avvisare l'utente. Se l'utente clicca sulla notifica e
- * ritorna manualmente sulla pagina, il video riprenderà automaticamente, perché l'interazione con una notifica è a sua volta
- * un'interazione con la pagina stessa.
+ * ritorna manualmente sulla pagina, il video riprenderà automaticamente, perché l'interazione con una notifica è essa stessa
+ * un'interazione con la pagina.
  *
  * - Se l'utente non clicca sulla notifica, mostra a video una modale bloccante che obbligherà l'utente a cliccare su
  * un pulsante. In quel momento, l'utente avrà effettivamente interagito con la pagina, quindi il video potrà ripartire.
@@ -82,6 +56,7 @@ function managePlayError(err) {
  * 1. Manda una notifica per avvisare che il video è iniziato
  * 2. Gestisce l'evento di fine del video, in cui proverà ad andare alla pagina successiva
  * 3. Inizializza il controllo delle fasce orarie
+ * 4. Ogni 30 secondi, controlla di essere nella fascia oraria corretta. Se non lo è, mette in pausa il video.
  */
 function managePlaySuccess() {
     const titoloCorso = $('#region-main h2').text();
@@ -89,16 +64,40 @@ function managePlaySuccess() {
     $('#force-start').hide();
 
     player.on('ended', () => {
-        console.log('video finito, vado al prossimo')
         setTimeout(() => {
             Utils.tryToGoToNextPage();
         }, getRandomMs(5, 15))
     })
 
-    initCheckFasceOrarie();
+    //init fasce orarie
+    let isVideoPaused = false;
+    setInterval(() => {
+
+        if (!isCorrectFasciaOraria()) {
+            if (!isVideoPaused) {
+                player.pause();
+                isVideoPaused = true;
+                showNotification('Inizio fascia oraria protetta', 'Video messo in pausa');
+
+            }
+        } else {
+            if (isVideoPaused) {
+                player.play();
+                isVideoPaused = false;
+                showNotification('Fine fascia oraria protetta', 'Video ripreso');
+            }
+        }
+
+    }, 30000)
 }
 
 let initInterval = getRandomMs(5, 8);
+/**
+ * Avvio del video:
+ * - Controlla che all'interno della pagina sia presente il pulsante "Next activity", in tal caso aspetta un lasso di tempo
+ * variabile e va alla pagina successiva
+ * - Se non trova il pulsante, fa partire il video.
+ */
 function init() {
     let nextActivityLink = Utils.getNextActivityLink();
 
