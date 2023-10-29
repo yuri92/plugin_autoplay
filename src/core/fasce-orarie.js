@@ -17,7 +17,8 @@ $('body').prepend(`
     }
     #fasce-orarie { 
         font-family: Arial,serif;
-        position: absolute;        
+        position: fixed;
+        z-index: 999999;        
         margin: 10px; 
         right: 1em;
         top: 35%;
