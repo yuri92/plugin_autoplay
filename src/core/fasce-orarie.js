@@ -22,7 +22,7 @@ $('body').prepend(`
         z-index: 999999;        
         margin: 10px; 
         right: 1em;
-        top: 10%;
+        top: 30%;
         background-color : lightgray;
         padding:10px; 
     }
