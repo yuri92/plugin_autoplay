@@ -2,7 +2,7 @@
   "name": "plugin-chrome-corso",
   "version": "1.0.0",
   "description": "",
-  "main": "script.js",
+  "main": "src/core/index.js",
   "scripts": {
     "start": "lite-server"
   },

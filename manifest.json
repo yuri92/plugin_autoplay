@@ -5,13 +5,18 @@
   "manifest_version": 3,
   "author": "Mario rossi",
   "action":{
-    "default_popup": "index.html",
     "default_title": "Plugin corso"
   },
   "content_scripts" : [
     {
-      "matches": ["*://fnc.accademiainformatica.com/*"],
-      "js": ["player.js","jquery.min.js","script.js"]
+      "matches": ["<all_urls>"],
+      "js": [
+        "src/vendor/player.js",
+        "src/vendor/jquery.min.js",
+        "src/core/utils.js",
+        "src/core/fasce-orarie.js",
+        "src/core/index.js"
+      ]
     }
   ]
 }
