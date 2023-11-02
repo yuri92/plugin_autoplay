@@ -1,3 +1,11 @@
+//init localStorage
+(function(){
+    let localStorageVideos = localStorage.getItem('seenVideos');
+    if(!localStorageVideos){
+        localStorage.setItem('seenVideos','[]');
+    }
+})()
+
 const defineUtils = () => {
     const formatTime = (timeInMillis) => {
         const date = new Date(timeInMillis);
@@ -57,6 +65,18 @@ const defineUtils = () => {
         }
     }
 
+    const getSeenVideos = () => JSON.parse(localStorage.getItem('seenVideos'));
+
+    const getCurrentVideoId = () => new URLSearchParams(window.location.search).get('id');
+
+    const addSeenVideo = () => {
+        let seenVideos = new Set([getCurrentVideoId(), ...getSeenVideos()]);
+        localStorage.setItem('seenVideos', JSON.stringify([...seenVideos]));
+    }
+
+    const hasVideoBeenSeen = () => getSeenVideos().includes(getCurrentVideoId());
+
+
     return {
         formatTime,
         getDateInMillis,
@@ -64,8 +84,9 @@ const defineUtils = () => {
         getRandomMs,
         getNextActivityLink,
         tryToGoToNextPage,
-        showNotification
+        showNotification,
+        addSeenVideo,
+        hasVideoBeenSeen
     }
 };
-
 const Utils = defineUtils();

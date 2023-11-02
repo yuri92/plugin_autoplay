@@ -1,6 +1,7 @@
 const {showNotification, getRandomMs} = Utils;
 let player;
 
+
 /**
  * Rimuove la dialog con l'avvertimento del mancato play del video
  * Diminuisce l'initInterval a 1 secondo per far partire il video QUASI subito
@@ -64,7 +65,9 @@ function managePlaySuccess() {
     $('#force-start').hide();
 
     player.on('ended', () => {
+        Utils.addSeenVideo();
         setTimeout(() => {
+            // metto l'id del video in localStorage
             Utils.tryToGoToNextPage();
         }, getRandomMs(5, 15))
     })
@@ -101,7 +104,7 @@ let initInterval = getRandomMs(5, 8);
 function init() {
     let nextActivityLink = Utils.getNextActivityLink();
 
-    if (nextActivityLink) {
+    if (nextActivityLink && Utils.hasVideoBeenSeen()) {
         setTimeout(() => {
             Utils.tryToGoToNextPage(false);
         }, getRandomMs(3, 6))
@@ -109,9 +112,8 @@ function init() {
     } else {
         const interval = setInterval(() => {
             player = new Vimeo.Player($('iframe')[0]);
-
             player.ready().then(() => {
-                player.play().then(() => {
+                player.play().then((data) => {
                     clearInterval(interval);
                     managePlaySuccess();
 
