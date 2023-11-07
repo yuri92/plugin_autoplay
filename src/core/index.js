@@ -64,7 +64,8 @@ function managePlaySuccess() {
     showNotification('Video iniziato', titoloCorso);
     $('#force-start').hide();
 
-    player.on('ended', () => {
+    player.on('ended', data => {
+        Utils.updateSeenTimer(data.duration);
         Utils.addSeenVideo();
         setTimeout(() => {
             // metto l'id del video in localStorage

@@ -74,7 +74,24 @@ const defineUtils = () => {
         localStorage.setItem('seenVideos', JSON.stringify([...seenVideos]));
     }
 
+    const updateSeenTimer = (duration) => {
+        let currentTimer = Number(localStorage.getItem("seenTimer"));
+        currentTimer += duration;
+        localStorage.setItem("seenTimer", currentTimer);
+    }
+
     const hasVideoBeenSeen = () => getSeenVideos().includes(getCurrentVideoId());
+
+    const convertSeconds = (seconds) => {
+        const hours = Math.floor(seconds / 3600)
+        const minutes = Math.floor((seconds % 3600) / 60)
+
+        if (hours > 0) {
+            return `${hours}h ${minutes}m`
+        } else {
+            return `${minutes}m`
+        }
+    }
 
 
     return {
@@ -86,7 +103,9 @@ const defineUtils = () => {
         tryToGoToNextPage,
         showNotification,
         addSeenVideo,
-        hasVideoBeenSeen
+        hasVideoBeenSeen,
+        updateSeenTimer,
+        convertSeconds
     }
 };
 const Utils = defineUtils();
