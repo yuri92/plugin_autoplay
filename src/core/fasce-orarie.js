@@ -61,6 +61,8 @@ $(document).ready(() => {
             <td>${Utils.formatTime(fineLavoro)}</td>
           </tr>
         </table>
+        <br>
+            <button style="width:100%; cursor: pointer; border:2px solid darkred" id="reset-timer"><strong>Reset timer e video visti</strong></button>
         </div>`)
 
     const currentTimeInterval = setInterval(() => {
@@ -71,6 +73,13 @@ $(document).ready(() => {
         event.preventDefault();
         $('#fasce-orarie').hide();
         clearInterval(currentTimeInterval);
+    })
+
+    $('#reset-timer').on('click', event => {
+        event.preventDefault();
+        localStorage.removeItem("seenTimer");
+        localStorage.removeItem("seenVideos");
+        window.location.reload();
     })
 })
 
